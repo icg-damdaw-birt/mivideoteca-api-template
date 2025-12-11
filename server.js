@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const { PrismaClient } = require('@prisma/client');
 
-// Cliente de Prisma: ORM que conecta con PostgreSQL
+// Cliente de Prisma: ORM que conecta con la base de datos (SQLite en dev, PostgreSQL en prod)
 const prisma = new PrismaClient();
 
 // Importamos las rutas modularizadas

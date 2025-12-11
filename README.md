@@ -21,7 +21,7 @@ En la Unidad 5 migraremos a **PostgreSQL** en Neon:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone <url-del-repo>
+git clone https://github.com/icg-damdaw-birt/mivideoteca-api.git
 cd mivideoteca-api
 ```
 
@@ -89,8 +89,8 @@ Esto significa:
 ```bash
 npm test
 
-# ✅ authController.test.js (implementado)
-# ⏸️ movieController.test.js (se creará en video UD3)
+# ✅ auth.test.js (implementado)
+# ⏸️ movies.test.js (se creará en video UD3)
 ```
 
 ---
@@ -140,8 +140,8 @@ mivideoteca-api/
 │   ├── dev.db         # SQLite (generado en UD3)
 │   └── migrations/    # Historial de cambios en BD
 ├── __tests__/         # Tests automatizados
-│   ├── authController.test.js   ✅ Implementado
-│   └── movieController.test.js  ⏸️ Se creará en video UD3
+│   ├── auth.test.js   ✅ Implementado
+│   └── movie.test.js  ⏸️ Se creará en video UD3
 ├── server.js          # Punto de entrada
 ├── package.json       # Dependencias y scripts
 └── .env              # Variables de entorno (local)
@@ -234,7 +234,7 @@ DELETE /api/movies/:id
 - ⏸️ Tests de películas **pendientes** (video)
 
 #### **🎬 En el video harás:**
-1. **Crear `movieController.test.js`**
+1. **Crear `movie.test.js`**
    - Test: GET /api/movies
    - Test: POST /api/movies
    - Test: PUT /api/movies/:id
