@@ -90,7 +90,8 @@ Esto significa:
 npm test
 
 # ✅ auth.test.js (implementado)
-# ⏸️ movies.test.js (se creará en video UD3)
+# ⏸️ favorite.test.js (se creará en video UD3)
+# ⏸️ rating.test.js (ejercicio del alumno)
 ```
 
 ---
@@ -101,8 +102,8 @@ npm test
 |--------|---------|-------------|
 | `npm run dev` | nodemon server.js | Servidor con auto-reload |
 | `npm start` | node server.js | Servidor modo producción |
-| `npm test` | jest | Ejecutar tests |
-| `npm run test:watch` | jest --watchAll | Tests en modo watch |
+| `npm test` | jest --verbose | Ejecutar tests |
+| `npm run test:watch` | jest --watchAll --verbose | Tests en modo watch |
 | `npm run prisma:migrate` | prisma migrate dev | Crear/aplicar migraciones |
 | `npm run prisma:generate` | prisma generate | Regenerar cliente Prisma |
 | `npm run prisma:studio` | prisma studio | GUI de base de datos |
@@ -114,11 +115,11 @@ npm test
 
 - **Node.js** - Entorno de ejecución JavaScript
 - **Express 5** - Framework web minimalista
-- **Prisma** - ORM moderno para bases de datos
+- **Prisma 7** - ORM moderno con driver adapters
 - **SQLite** (UD3) / **PostgreSQL** (UD5) - Base de datos
 - **JWT** - Autenticación stateless
 - **bcryptjs** - Hash de contraseñas
-- **Jest** - Framework de testing
+- **Jest 30** - Framework de testing
 - **Supertest** - Testing de APIs HTTP
 
 ---
@@ -129,22 +130,27 @@ npm test
 mivideoteca-api/
 ├── controllers/          # Lógica de negocio
 │   ├── authController.js     ✅ Implementado + testeado
-│   └── movieController.js    ✅ Implementado (sin tests)
+│   └── movieController.js    ✅ Implementado + testeado
 ├── routes/              # Definición de endpoints
 │   ├── authRoutes.js
 │   └── movieRoutes.js
 ├── middleware/          # Funciones intermedias
 │   └── authMiddleware.js
-├── prisma/             # Configuración de base de datos
-│   ├── schema.prisma   # Esquema de datos
-│   ├── dev.db         # SQLite (generado en UD3)
-│   └── migrations/    # Historial de cambios en BD
-├── __tests__/         # Tests automatizados
-│   ├── auth.test.js   ✅ Implementado
-│   └── movie.test.js  ⏸️ Se creará en video UD3
-├── server.js          # Punto de entrada
-├── package.json       # Dependencias y scripts
-└── .env              # Variables de entorno (local)
+├── lib/                 # Utilidades compartidas
+│   └── prisma.js        # Cliente Prisma configurado
+├── prisma/              # Configuración de base de datos
+│   ├── schema.prisma    # Esquema de datos
+│   ├── dev.db           # SQLite (generado tras migrate)
+│   └── migrations/      # Historial de cambios en BD
+├── __tests__/           # Tests automatizados
+│   ├── auth.test.js     ✅ Implementado
+│   ├── movie.test.js    ✅ Implementado (referencia CRUD)
+│   ├── favorite.test.js ⏸️ Video UD3
+│   └── rating.test.js   ⏸️ Ejercicio alumno
+├── prisma.config.ts     # Configuración Prisma 7
+├── server.js            # Punto de entrada
+├── package.json         # Dependencias y scripts
+└── .env                 # Variables de entorno (local)
 ```
 
 ---
@@ -201,7 +207,7 @@ Content-Type: application/json
   "title": "Inception",
   "director": "Christopher Nolan",
   "year": 2010,
-  "genre": "Sci-Fi"
+  "posterUrl": "https://image.tmdb.org/t/p/w500/..."
 }
 ```
 
@@ -211,8 +217,10 @@ PUT /api/movies/:id
 Content-Type: application/json
 
 {
-  "title": "Inception (Updated)",
-  "year": 2010
+  "title": "Inception (Director's Cut)",
+  "director": "Christopher Nolan",
+  "year": 2010,
+  "posterUrl": "https://image.tmdb.org/t/p/w500/..."
 }
 ```
 
@@ -231,26 +239,19 @@ DELETE /api/movies/:id
 #### **Estado inicial:**
 - ✅ API funcionando con CRUD completo
 - ✅ Tests de autenticación implementados
-- ⏸️ Tests de películas **pendientes** (video)
 
 #### **🎬 En el video harás:**
-1. **Crear `movie.test.js`**
-   - Test: GET /api/movies
-   - Test: POST /api/movies
-   - Test: PUT /api/movies/:id
-   - Test: DELETE /api/movies/:id
-
-2. **Implementar Favoritos**
+1. **Implementar Favoritos**
    - Modificar schema de Prisma (campo `isFavorite`)
    - Endpoint: PATCH /api/movies/:id/favorite
-   - Test de favoritos
+   - Crear `favorite.test.js` con tests completos
 
 #### **📝 Tu ejercicio:**
-Implementar **Rating** (calificación 1-5) usando IA:
+Implementar **Rating** (calificación 0-5) usando IA:
 - Modificar schema (campo `rating`)
 - Endpoint: PATCH /api/movies/:id/rating
-- Validación: rating entre 1 y 5
-- Tests completos
+- Validación: rating entre 0 y 5
+- Crear `rating.test.js` con tests completos
 
 ---
 
@@ -269,7 +270,7 @@ En esta unidad consumirás el backend que creaste en UD3.
 Migraremos de SQLite a **PostgreSQL en Neon**:
 ```env
 # Producción
-DATABASE_URL="postgresql://user:password@neon.tech/mivideoteca"
+DATABASE_URL="postgresql://user:password@host.neon.tech/mivideoteca?sslmode=require"
 ```
 
 Y desplegaremos en:
